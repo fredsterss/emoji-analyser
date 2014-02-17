@@ -39,8 +39,16 @@ function createOrderedArray (arr) {
     }
   }
 
-  // now sory unique words by count
+  // now sort unique words by count
+  uniqueWords.sort(function(a, b){
+    return words[b] - words[a]; // ASC -> a - b; DESC -> b - a
+  });
+
+  console.log(uniqueWords);
   
+  for (i = 0; i < uniqueWords.length; i++) {
+    console.log(uniqueWords[i], words[uniqueWords[i]]);
+  }
 
   return words;
 }
