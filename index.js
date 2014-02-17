@@ -1,5 +1,6 @@
 var Emitter = require('emitter')
-  , events = require('event');
+  , events = require('event')
+  , Rickshaw = require('rickshaw');
 
 /**
  * Expose Emoji Analyser
@@ -26,7 +27,43 @@ function analyse (string) {
   var uniqueWords = w[0];
   var words = w[1];
 
+  var graph = new Rickshaw.Graph({
+    element: document.querySelector("#chart"),
+    renderer: 'bar',
+    series: [{
+      data: prepareData(words, uniqueWords),
+      color: 'steelblue'
+    }]
+  });
+   
+  graph.render();
+
+  var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+    graph: graph
+  });
+
+  var xAxisQPerDay = new Rickshaw.Graph.Axis.X({
+    graph: graph,
+    tickFormat: function(x) {
+      return uniqueWords[x];
+    }
+  });
+  xAxisQPerDay.render();
+  graph.update();
+
   prettyOutput(uniqueWords, words);
+}
+
+function prepareData (words, uniqueWords) {
+  arr = [];
+  for (i = 0; i < uniqueWords.length; i++) {
+    arr.push({
+      name: uniqueWords[i],
+      x: i,
+      y: words[uniqueWords[i]]
+    });
+  }
+  return arr;
 }
 
 function createOrderedArray (arr) {

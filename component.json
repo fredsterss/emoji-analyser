@@ -2,12 +2,12 @@
   "name": "emoji-analyser",
   "repo": "fredsterss/emoji-analyser",
   "description": "Analyse your emoji usage in browser.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "component/emitter": "*",
     "component/event": "*",
     "ianstormtaylor/meyer-reset": "*",
-    "component/indexof": "*"
+    "cristiandouce/rickshaw": "*"
   },
   "development": {},
   "license": "MIT",

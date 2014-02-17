@@ -1,4 +1,10 @@
-#text {
-  width: 50%;
-  height: 100%;
+#text,
+#chart {
+  float: left;
+  clear: left;
+  width: 100%;
+  height: 50%;
+}
+
+#chart {
 }
