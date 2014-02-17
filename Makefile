@@ -1,6 +1,6 @@
 
 build: components index.js emoji-analyser.css template.js
-	@component build --dev
+	@component build --dev --out public/build
 
 template.js: template.html
 	@component convert $<
