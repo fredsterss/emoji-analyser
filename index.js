@@ -9,7 +9,8 @@ module.exports = EmojiAnalyser;
 
 function EmojiAnalyser (el) {
   if (!(this instanceof EmojiAnalyser)) return new EmojiAnalyser(el);
-  this.bind(el);
+  // this.bind(el);
+  analyse(el.value);
 }
 
 EmojiAnalyser.prototype.bind = function (el) {
@@ -27,31 +28,10 @@ function analyse (string) {
   var uniqueWords = w[0];
   var words = w[1];
 
-  var graph = new Rickshaw.Graph({
-    element: document.querySelector("#chart"),
-    renderer: 'bar',
-    series: [{
-      data: prepareData(words, uniqueWords),
-      color: 'steelblue'
-    }]
-  });
-   
-  graph.render();
-
-  var hoverDetail = new Rickshaw.Graph.HoverDetail( {
-    graph: graph
-  });
-
-  var xAxisQPerDay = new Rickshaw.Graph.Axis.X({
-    graph: graph,
-    tickFormat: function(x) {
-      return uniqueWords[x];
-    }
-  });
-  xAxisQPerDay.render();
-  graph.update();
-
-  prettyOutput(uniqueWords, words);
+  var graph = renderBarGraph(document.querySelector("#chart"), prepareData(words, uniqueWords));
+  // renderXAxis(graph, uniqueWords);
+  renderHover(graph);
+  // prettyOutput(uniqueWords, words);
 }
 
 function prepareData (words, uniqueWords) {
@@ -96,6 +76,42 @@ function prettyOutput (uniqueWords, words) {
   }
 }
 
+/**
+ * Graph rendering functions
+ */
+function renderBarGraph (el, data) {
+  var graph = new Rickshaw.Graph({
+    element: el,
+    renderer: 'bar',
+    series: [{
+      data: data,
+      color: 'steelblue'
+    }]
+  }); 
+  graph.render();
+  return graph;
+}
+
+function renderXAxis (graph, labels) {
+  var xAxisQPerDay = new Rickshaw.Graph.Axis.X({
+    graph: graph,
+    tickFormat: function(x) {
+      return labels[x];
+    },
+    ticks: labels.length,
+    orientation: 'top'
+  });
+  xAxisQPerDay.render();
+}
+
+function renderHover (graph) {
+  var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+    graph: graph,
+    formatter: function(series, x, y, formattedX, formattedY, d) {
+      return "\"" + series.data[x].name + "\"" + ': repeated ' + formattedY + " times";
+    }
+  });
+}
 
 
 
