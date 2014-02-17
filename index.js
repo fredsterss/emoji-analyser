@@ -21,7 +21,12 @@ EmojiAnalyser.prototype.bind = function (el) {
 
 function analyse (string) {
   var split = string.toLowerCase().split(/\s/g);
-  var words = createOrderedArray(split);
+  var w = createOrderedArray(split);
+  
+  var uniqueWords = w[0];
+  var words = w[1];
+
+  prettyOutput(uniqueWords, words);
 }
 
 function createOrderedArray (arr) {
@@ -44,15 +49,15 @@ function createOrderedArray (arr) {
     return words[b] - words[a]; // ASC -> a - b; DESC -> b - a
   });
 
-  console.log(uniqueWords);
-  
+  return [uniqueWords, words];
+}
+
+function prettyOutput (uniqueWords, words) {
+  // output
   for (i = 0; i < uniqueWords.length; i++) {
     console.log(uniqueWords[i], words[uniqueWords[i]]);
   }
-
-  return words;
 }
-
 
 
 
