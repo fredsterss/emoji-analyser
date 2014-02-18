@@ -7,9 +7,10 @@
     "component/emitter": "*",
     "component/event": "*",
     "ianstormtaylor/meyer-reset": "*",
-    "cristiandouce/rickshaw": "*",
-    "fredsterss/d3-bar-chart": "*"
+    "cristiandouce/rickshaw": "*"
   },
+  "local" : ["d3-bar-chart"],
+  "paths": ["/Users/fred/Documents/Projects/components"],
   "development": {},
   "license": "MIT",
   "main": "index.js",
