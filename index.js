@@ -1,6 +1,6 @@
 var Emitter = require('emitter')
   , events = require('event')
-  , Rickshaw = require('rickshaw');
+  , BarChart = require("d3-bar-chart");
 
 /**
  * Expose Emoji Analyser
@@ -9,16 +9,30 @@ module.exports = EmojiAnalyser;
 
 function EmojiAnalyser (el) {
   if (!(this instanceof EmojiAnalyser)) return new EmojiAnalyser(el);
-  // this.bind(el);
-  analyse(el.value);
+  this.bind(el);
 }
 
 EmojiAnalyser.prototype.bind = function (el) {
   events.bind(el, 'keypress', function (e) {
     if (e.keyCode == 13) {
+      console.log(el.value);
       analyse(el.value);
     }
   });
+}
+
+function buildCharts (data) {
+  var barChart = BarChart(".chart");
+  //   , dataMd = [
+  //     { name: "Locke", value: 4 },
+  //     { name: "Reyes", value: 8 },
+  //     { name: "Ford", value: 15 },
+  //     { name: "Jarrah", value: 16 },
+  //     { name: "Shephard", value: 23 },
+  //     { name: "Kwon", value: 42 }
+  //   ];
+  console.log(data);
+  barChart.makeVerticalSvgChart(data);
 }
 
 function analyse (string) {
@@ -27,10 +41,10 @@ function analyse (string) {
   
   var uniqueWords = w[0];
   var words = w[1];
+  buildCharts(prepareData(words, uniqueWords));
 
-  var graph = renderBarGraph(document.querySelector("#chart"), prepareData(words, uniqueWords));
   // renderXAxis(graph, uniqueWords);
-  renderHover(graph);
+  // renderHover(graph);
   // prettyOutput(uniqueWords, words);
 }
 
@@ -39,8 +53,7 @@ function prepareData (words, uniqueWords) {
   for (i = 0; i < uniqueWords.length; i++) {
     arr.push({
       name: uniqueWords[i],
-      x: i,
-      y: words[uniqueWords[i]]
+      value: words[uniqueWords[i]]
     });
   }
   return arr;
@@ -75,43 +88,3 @@ function prettyOutput (uniqueWords, words) {
     console.log(uniqueWords[i], words[uniqueWords[i]]);
   }
 }
-
-/**
- * Graph rendering functions
- */
-function renderBarGraph (el, data) {
-  var graph = new Rickshaw.Graph({
-    element: el,
-    renderer: 'bar',
-    series: [{
-      data: data,
-      color: 'steelblue'
-    }]
-  }); 
-  graph.render();
-  return graph;
-}
-
-function renderXAxis (graph, labels) {
-  var xAxisQPerDay = new Rickshaw.Graph.Axis.X({
-    graph: graph,
-    tickFormat: function(x) {
-      return labels[x];
-    },
-    ticks: labels.length,
-    orientation: 'top'
-  });
-  xAxisQPerDay.render();
-}
-
-function renderHover (graph) {
-  var hoverDetail = new Rickshaw.Graph.HoverDetail( {
-    graph: graph,
-    formatter: function(series, x, y, formattedX, formattedY, d) {
-      return "\"" + series.data[x].name + "\"" + ': repeated ' + formattedY + " times";
-    }
-  });
-}
-
-
-
